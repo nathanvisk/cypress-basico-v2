@@ -163,10 +163,25 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         
      })  
 
-     it.only('verifica que a politica de privacidade abre em outrar aba sem a necessidade de um clique', function(){
+     it('verifica que a politica de privacidade abre em outrar aba sem a necessidade de um clique', function(){
      cy.get('a[href="privacy.html"]')
         .should('have.attr', 'target', '_blank')
 
     })
+    it('acessa a página da política de privacidade removendo o target e então clicando no link', function(){
+        cy.get('a[href="privacy.html"]')
+           .invoke('removeAttr', 'target').click()
+
+           cy.contains('Não salvamos dados submetidos no formulário da aplicação CAC TAT. Utilzamos as tecnologias HTML, CSS e JavaScript, para simular uma aplicação real. No entanto, a aplicação é um exemplo, sem qualquer persistência de dados, e usada para fins de ensino.')             
+            .should('be.visible')
+
+        })
+    it.only('testa a página da política de privacidade de forma independente', function(){
+        cy.visit('./src/privacy.html')
+
+        cy.contains('Talking About Testing')             
+            .should('be.visible')
+
+})
 
 })
