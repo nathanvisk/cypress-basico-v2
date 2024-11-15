@@ -183,5 +183,109 @@ describe('Central de Atendimento ao Cliente TAT', function() {
             .should('be.visible')
 
 })
+    it('Verifica mensagem de erro', function() {
+        cy.clock()
+        cy.get('#firstName').type('Nathan')
+        cy.get('#lastName').type('mesquita')
+        cy.get('#email').type('Nathanmesquita@gmail.com.br')
 
+        cy.get('#phone-checkbox').check()
+        cy.contains('button', 'Enviar').click()
+        
+        
+        
+        cy.get('.error').should('be.visible')
+
+        cy.tick(3000)
+
+        cy.get('.error').should('not.be.visible')
+})
+
+    it('Verifica mensagem de sucesso', function(){
+        cy.clock()
+
+        cy.get('#firstName').type('Nathan')
+        cy.get('#lastName').type('mesquita')
+        cy.get('#email').type('Nathanmesquita@gmail.com')
+        cy.get('#open-text-area').type('Acredita em anjo Pois é, sou o seuSoube que anda tristeQue sente falta de alguémQue não quer amar ninguémisso estou aquiVim cuidar de vocêTe proteger, te fazer sorrirTe entender, te ouvirE quando tiver cansadaCantar pra você dormir', {delay: 0})
+        cy.contains('button', 'Enviar').click()
+
+        cy.get('.success').should('be.visible')
+
+        cy.tick(3000)
+
+        cy.get('.success').should('not.be.visible')
+        
+})
+
+
+    it('Executar o mesmo teste varias vezes', function(){
+        cy.clock()
+        Cypress._.times(10, () => {
+
+        cy.get('#firstName').type('Nathan')
+        cy.get('#lastName').type('mesquita')
+        cy.get('#email').type('Nathanmesquita@gmail.com')
+        cy.get('#phone-checkbox').check()
+        cy.get('#phone').type('11941432426')
+        cy.get('#open-text-area').type('Acredita em anjo Pois é, sou o seuSoube que anda tristeQue sente falta de alguémQue não quer amar ninguémisso estou aquiVim cuidar de vocêTe proteger, te fazer sorrirTe entender, te ouvirE quando tiver cansadaCantar pra você dormir', {delay: 0})
+        
+
+        cy.contains('button', 'Enviar').click()
+        
+        cy.get('.success').should('be.visible')
+        cy.tick(500)
+        
+})    
+})
+
+    it('exibe e esconde as mensagens de sucesso e erro usando o .invoke', () => {
+        cy.get('.success')
+            .should('not.be.visible')
+                .invoke('show')
+                    .should('be.visible')
+                .and('contain', 'Mensagem enviada com sucesso.')
+             .invoke('hide')
+        .should('not.be.visible')
+        cy.get('.error')
+            .should('not.be.visible')
+                .invoke('show')
+                    .should('be.visible')
+                .and('contain', 'Valide os campos obrigatórios!')
+            .invoke('hide')
+        .should('not.be.visible')
+ })
+
+        it('preenche a area de texto usando o comando invoke', function() {
+
+         const copiaPanoix = Cypress._.repeat('12345' , 50) 
+            cy.get('#firstName').invoke('val', 'Nathan')
+
+            cy.get('#open-text-area')
+                .invoke('val', copiaPanoix)
+                    .should('have.value', copiaPanoix)
+
+})
+        it('faz uma requisição HTTP', function() {
+            cy.request({
+            method: 'GET',
+            url: 'https://cac-tat.s3.eu-central-1.amazonaws.com/index.html'})
+            .should(function(response) {
+            const {status, statusText, body} = response
+            expect(status).to.equal(200)
+            expect(statusText).to.equal('OK')
+            expect(body).to.include('CAC TAT')
+        
+        })
+})
+        it.only('Desafio do Gatin', () => {
+            cy.get('#cat')
+            .invoke('show')
+                .should('be.visible')
+                    
+                        
+                  
+
+
+})
 })
